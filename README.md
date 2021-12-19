@@ -82,7 +82,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: discovery.seed_hosts
-            value: "	,es-cluster-1.elasticsearch,es-cluster-2.elasticsearch"
+            value: "es-cluster-0.elasticsearch,es-cluster-1.elasticsearch,es-cluster-2.elasticsearch"
           - name: cluster.initial_master_nodes
             value: "es-cluster-0,es-cluster-1,es-cluster-2"
           - name: ES_JAVA_OPTS
@@ -129,9 +129,9 @@ Waiting for 1 pods to be ready...
 partitioned roll out complete: 3 new pods have been updated...
 # kubectl get pod -n kube-logging -o wide
 NAME           READY   STATUS    RESTARTS   AGE     IP              NODE                     NOMINATED NODE   READINESS GATES
-es-cluster-0   1/1     Running   0          6m      10.244.73.108   mumcnslnx05.in.sas.com   <none>           <none>
-es-cluster-1   1/1     Running   0          4m28s   10.244.69.12    mumcnslnx03.in.sas.com   <none>           <none>
-es-cluster-2   1/1     Running   0          3m7s    10.244.73.31    mumcnslnx02.in.sas.com   <none>           <none>
+es-cluster-0   1/1     Running   0          6m      10.244.73.108   k8s-node-4   <none>           <none>
+es-cluster-1   1/1     Running   0          4m28s   10.244.69.12    k8s-node-2   <none>           <none>
+es-cluster-2   1/1     Running   0          3m7s    10.244.73.31    k8s-node-1   <none>           <none>
 
 # kubectl port-forward --address 0.0.0.0 es-cluster-0 9200:9200 --namespace=kube-logging
 Tetsing
@@ -183,7 +183,7 @@ spec:
             cpu: 100m
         env:
           - name: ELASTICSEARCH_URL
-            value: http://mumcnslnx01.in.sas.com:9200
+            value: http://k8s-master-1:9200
         ports:
         - containerPort: 5601
 # kubectl create -f kibana.yaml
@@ -198,8 +198,8 @@ es-cluster-2              1/1     Running   0          33m
 kibana-5749b5778b-cnkxb   1/1     Running   0          97s
 # kubectl port-forward --address 0.0.0.0 kibana-5749b5778b-cnkxb 5601:5601 --namespace=kube-logging
 URL: http://localhost:5601
-http://mumcnslnx01.in.sas.com:5601
-https://172.27.187.183:5601
+http://k8s-master-1:5601
+https://192.168.1.1:5601
 
 ```
 
@@ -317,4 +317,4 @@ kubectl -n kube-logging delete Deployment kibana
 kubectl delete ns kube-logging
 ```
 
-![Kibana](./Kibana.png)
+![Kibana](./Kibana.jpg)
